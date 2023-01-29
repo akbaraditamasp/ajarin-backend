@@ -69,4 +69,18 @@ class Vendor extends Controller
         //Return vendor data as a response
         return $vendor->toArray();
     }
+
+    //Revoke invitation code
+    public function revokeInvitationCode(Request $request, $id)
+    {
+        //Get the vendor
+        $vendor = $request->user()->vendors()->findOrFail($id);
+
+        //Remove invitation code from the vendor
+        $vendor->invitation_code = null;
+        $vendor->save();
+
+        //Return vendor data with invitation code as a response
+        return $vendor->toArray() + ["invitation_code" => null];
+    }
 }
