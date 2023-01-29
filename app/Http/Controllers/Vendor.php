@@ -29,7 +29,7 @@ class Vendor extends Controller
         $request->user()->vendors()->save($vendor);
 
         //Return vendor data as a response
-        return $vendor->toArray();
+        return $vendor->load("users")->toArray();
     }
 
     //Create new invitation code

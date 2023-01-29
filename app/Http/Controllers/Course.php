@@ -62,7 +62,7 @@ class Course extends Controller
 
             $course->members()->attach($attached_teacher);
 
-            $results = $course->load("members")->toArray();
+            $results = $course->load("members")->load("vendor")->toArray();
         });
 
         return $results;
