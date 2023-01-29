@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::controller(User::class)->group(function () {
-    Route::post("/user", "create");
+Route::controller(User::class)->prefix("/user")->group(function () {
+    Route::get("/login", "login");
+    Route::post("/", "create");
 });

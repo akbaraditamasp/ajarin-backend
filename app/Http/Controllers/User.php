@@ -43,4 +43,31 @@ class User extends Controller
         //return the response with created token
         return $user->toArray() + ["token" => ($user->createToken("Login"))->plainTextToken];
     }
+
+    //Login
+    public function login(Request $request)
+    {
+        //Validate incoming data
+        [
+            "whatsapp" => $whatsapp,
+            "password" => $password,
+        ] = $request->validate([
+            "whatsapp" => "required|numeric",
+            "password" => "required"
+        ]);
+
+        //Get user model
+        $user = ModelsUser::where("whatsapp", $whatsapp)->firstOrFail();
+
+        //Check the password
+        if (!password_verify($password, $user->password)) {
+            //Return the error response
+            return response()->json([
+                "error" => "Unauthorized"
+            ], 401);
+        }
+
+        //Return the response with created token
+        return $user->toArray() + ["token" => ($user->createToken("Login"))->plainTextToken];
+    }
 }
