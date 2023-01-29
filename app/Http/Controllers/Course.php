@@ -23,11 +23,11 @@ class Course extends Controller
             "teachers" => $teachers
         ] = $request->validate([
             "vendor_id" => "required|numeric",
-            "pic" => "file|image|size:2048",
+            "pic" => "file|image|max:2048",
             "title" => "required",
             "description" => "required",
             "price" => "required|numeric",
-            "start_at" => "required|date_format:d-m-Y",
+            "start_at" => "required|date_format:d-m-Y|after:tomorrow",
             "teachers" => "required|array|min:1",
             "teachers.*" => "numeric"
         ]) + ["pic" => null];
@@ -41,13 +41,18 @@ class Course extends Controller
         $results = [];
 
         //Save course and attach each teachers using transaction
-        DB::transaction(function () use (&$results, $title, $description, $price, $start_at, $vendor, $teachers) {
+        DB::transaction(function () use (&$results, $title, $description, $price, $start_at, $vendor, $teachers, $pic, $request) {
             //Create course model
             $course = new ModelsCourse();
             $course->title = $title;
             $course->description = $description;
             $course->price = $price;
             $course->start_at = $start_at;
+
+            //If picture uploaded
+            if ($pic) {
+                $course->pic = Cuid::cuid();
+            }
 
             $vendor->courses()->save($course);
 
@@ -61,6 +66,11 @@ class Course extends Controller
             }
 
             $course->members()->attach($attached_teacher);
+
+            //If picture uploaded store file
+            if ($pic) {
+                $request->file("pic")->storeAs("files", $course->pic);
+            }
 
             $results = $course->load("members")->load("vendor")->toArray();
         });
