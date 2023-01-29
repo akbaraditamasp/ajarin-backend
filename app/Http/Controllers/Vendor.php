@@ -48,4 +48,25 @@ class Vendor extends Controller
         //Return vendor data with code as a response
         return $vendor->toArray() + ["invitation_code" => $cuid];
     }
+
+    //Join to vendor
+    public function join(Request $request, $code)
+    {
+        //Get the vendor first
+        $vendor = ModelsVendor::where("invitation_code", $code)->firstOrFail();
+
+        //Check if already joined
+        if ($vendor->user()->where("user_id", $request->user()->id)->first()) {
+            //Return error user already joined
+            return response()->json([
+                "error" => "User already joined"
+            ], 403);
+        }
+
+        //Attach user to the vendor as a teacher
+        $vendor->user()->attach($request->user(), ["role" => "teacher"]);
+
+        //Return vendor data as a response
+        return $vendor->toArray();
+    }
 }
