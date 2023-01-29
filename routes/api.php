@@ -28,5 +28,6 @@ Route::controller(User::class)->prefix("/user")->group(function () {
 
 //Vendor route group
 Route::controller(Vendor::class)->prefix("/vendor")->group(function () {
+    Route::middleware("auth:sanctum")->post("/{id}/code", "createInvitationCode");
     Route::middleware("auth:sanctum")->post("/", "create");
 });

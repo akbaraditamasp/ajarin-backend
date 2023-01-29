@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vendor as ModelsVendor;
+use EndyJasmi\Cuid;
 use Illuminate\Http\Request;
 
 class Vendor extends Controller
@@ -29,5 +30,22 @@ class Vendor extends Controller
 
         //Return vendor data as a response
         return $vendor->toArray();
+    }
+
+    //Create new invitation code
+    public function createInvitationCode(Request $request, $id)
+    {
+        //Get the vendor
+        $vendor = $request->user()->vendors()->findOrFail($id);
+
+        //Create the cuid slug
+        $cuid = strtoupper(Cuid::slug());
+
+        //Save new cuid to vendor model
+        $vendor->invitation_code = $cuid;
+        $vendor->save();
+
+        //Return vendor data with code as a response
+        return $vendor->toArray() + ["invitation_code" => $cuid];
     }
 }
