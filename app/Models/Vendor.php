@@ -37,4 +37,9 @@ class Vendor extends Model
     // protected $casts = [
     //     'dob' => 'date',
     // ];
+
+    public function user()
+    {
+        return $this->belongsToMany(User::class)->withPivot("role", "created_at", "updated_at");
+    }
 }

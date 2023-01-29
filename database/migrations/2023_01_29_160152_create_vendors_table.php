@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('vendors', function (Blueprint $table) {
             $table->id();
             $table->string("vendor_name");
-            $table->string("pic");
+            $table->string("pic")->nullable();
             $table->string("address");
-            $table->string("invitation_code")->unique();
+            $table->string("invitation_code")->unique()->nullable();
             $table->timestamps();
         });
     }

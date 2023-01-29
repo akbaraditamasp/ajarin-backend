@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         //
-        Schema::create('vendor_user', function (Blueprint $table) {
+        Schema::create('user_vendor', function (Blueprint $table) {
             $table->id();
             $table->foreignId("user_id")->constrained("users")->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId("vendor_id")->constrained("vendors")->cascadeOnDelete()->cascadeOnUpdate();
@@ -32,5 +32,6 @@ return new class extends Migration
     public function down()
     {
         //
+        Schema::dropIfExists('user_vendor');
     }
 };

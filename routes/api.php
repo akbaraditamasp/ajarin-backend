@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\User;
+use App\Http\Controllers\Vendor;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,8 +19,14 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+//User route group
 Route::controller(User::class)->prefix("/user")->group(function () {
     Route::get("/login", "login");
     Route::middleware("auth:sanctum")->delete("/logout", "logout");
     Route::post("/", "create");
+});
+
+//Vendor route group
+Route::controller(Vendor::class)->prefix("/vendor")->group(function () {
+    Route::middleware("auth:sanctum")->post("/", "create");
 });

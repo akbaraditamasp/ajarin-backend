@@ -44,4 +44,9 @@ class User extends Authenticatable
     protected $casts = [
         'dob' => 'date',
     ];
+
+    public function vendors()
+    {
+        return $this->belongsToMany(Vendor::class)->withPivot("role", "created_at", "updated_at");
+    }
 }
