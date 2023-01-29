@@ -70,4 +70,14 @@ class User extends Controller
         //Return the response with created token
         return $user->toArray() + ["token" => ($user->createToken("Login"))->plainTextToken];
     }
+
+    //Logout
+    public function logout(Request $request)
+    {
+        //Revoking token
+        $request->user()->currentAccessToken()->delete();
+
+        //Return user data as a response
+        return $request->user()->toArray();
+    }
 }

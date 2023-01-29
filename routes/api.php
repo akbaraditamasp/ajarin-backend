@@ -20,5 +20,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(User::class)->prefix("/user")->group(function () {
     Route::get("/login", "login");
+    Route::middleware("auth:sanctum")->delete("/logout", "logout");
     Route::post("/", "create");
 });
