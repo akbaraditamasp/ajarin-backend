@@ -36,7 +36,7 @@ class Vendor extends Controller
     public function createInvitationCode(Request $request, $id)
     {
         //Get the vendor
-        $vendor = $request->user()->vendors()->findOrFail($id);
+        $vendor = $request->user()->vendors()->where("vendors.id", $id)->wherePivot("role", "admin")->firstOrFail();
 
         //Create the cuid slug
         $cuid = strtoupper(Cuid::slug());
@@ -74,7 +74,7 @@ class Vendor extends Controller
     public function revokeInvitationCode(Request $request, $id)
     {
         //Get the vendor
-        $vendor = $request->user()->vendors()->findOrFail($id);
+        $vendor = $request->user()->vendors()->where("vendors.id", $id)->wherePivot("role", "admin")->firstOrFail();
 
         //Remove invitation code from the vendor
         $vendor->invitation_code = null;
