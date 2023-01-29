@@ -5,19 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Vendor extends Model
+class Course extends Model
 {
     use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'vendor_name',
+        'vendor_id',
         'pic',
-        'address',
-        'invitation_code'
+        'title',
+        'description',
+        'price',
+        'start_at',
     ];
 
     /**
@@ -25,26 +28,26 @@ class Vendor extends Model
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'invitation_code',
-    ];
+    // protected $hidden = [
+    //     'invitation_code',
+    // ];
 
     /**
      * The attributes that should be cast.
      *
      * @var array<string, string>
      */
-    // protected $casts = [
-    //     'dob' => 'date',
-    // ];
+    protected $casts = [
+        'start_at' => 'date',
+    ];
 
-    public function users()
+    public function vendor()
     {
-        return $this->belongsToMany(User::class)->withPivot("role", "created_at", "updated_at");
+        return $this->belongsTo(Vendor::class);
     }
 
-    public function courses()
+    public function members()
     {
-        return $this->hasMany(Course::class);
+        return $this->belongsToMany(User::class)->withPivot("role", "created_at", "updated_at");
     }
 }

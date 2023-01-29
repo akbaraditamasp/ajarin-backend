@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Course;
 use App\Http\Controllers\User;
 use App\Http\Controllers\Vendor;
 use Illuminate\Support\Facades\Route;
@@ -31,5 +32,10 @@ Route::controller(Vendor::class)->prefix("/vendor")->group(function () {
     Route::middleware("auth:sanctum")->post("/join/{code}", "join");
     Route::middleware("auth:sanctum")->post("/{id}/code", "createInvitationCode");
     Route::middleware("auth:sanctum")->delete("/{id}/revoke-code", "revokeInvitationCode");
+    Route::middleware("auth:sanctum")->post("/", "create");
+});
+
+//Course route group
+Route::controller(Course::class)->prefix("/course")->group(function () {
     Route::middleware("auth:sanctum")->post("/", "create");
 });

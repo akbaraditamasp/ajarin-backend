@@ -49,4 +49,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Vendor::class)->withPivot("role", "created_at", "updated_at");
     }
+
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class)->withPivot("role", "created_at", "updated_at");
+    }
 }
