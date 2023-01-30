@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Casts\Url;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Course extends Model
 {
@@ -28,9 +31,9 @@ class Course extends Model
      *
      * @var array<int, string>
      */
-    // protected $hidden = [
-    //     'invitation_code',
-    // ];
+    protected $hidden = [
+        'pic',
+    ];
 
     /**
      * The attributes that should be cast.
@@ -48,6 +51,25 @@ class Course extends Model
 
     public function members()
     {
-        return $this->belongsToMany(User::class)->withPivot("role", "created_at", "updated_at");
+        return $this->belongsToMany(User::class)->withPivot("role", "member_id", "payment_link", "created_at", "updated_at");
     }
+
+    /**
+     * Determine if the user is an administrator.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function picUrl(): Attribute
+    {
+        return new Attribute(
+            get: fn () => Storage::url("public/files/" . $this->pic),
+        );
+    }
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['pic_url'];
 }

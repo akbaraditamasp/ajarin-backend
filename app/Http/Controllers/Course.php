@@ -69,7 +69,7 @@ class Course extends Controller
 
             //If picture uploaded store file
             if ($pic) {
-                $request->file("pic")->storeAs("files", $course->pic);
+                $request->file("pic")->storeAs("files", $course->pic, ["disk" => "public"]);
             }
 
             $results = $course->load("members")->load("vendor")->toArray();
