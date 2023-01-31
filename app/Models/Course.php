@@ -62,7 +62,7 @@ class Course extends Model
     protected function picUrl(): Attribute
     {
         return new Attribute(
-            get: fn () => Storage::url("public/files/" . $this->pic),
+            get: fn() => $this->pic ? Storage::url("public/files/" . $this->pic):null,
         );
     }
 
